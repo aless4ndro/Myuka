@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Myuka - Fiche produit</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <link rel="stylesheet" href="myuka.css">
+</head>
+
+<body>
+  <div id="myuka">
+    <nav class="menu">
+      <h1>Myuka</h1>
+    </nav>
+    <div class="formulaire-container">
+      <form @submit.prevent="submitForm">
+        <input type="text" placeholder="Entrez votre recherche..." v-model="searchQuery" />
+        <button type="submit">Rechercher</button>
+      </form>
+    </div>
+    <div class="fiche-produit">
+      <h2>{{ productData ? productData.product_name : 'Titre du produit' }}</h2>
+      <p v-if="productData">Code-barres : {{ productData.code }}</p>
+      <p v-if="productData">Marque : {{ productData.brands_tags ? productData.brands_tags[0] : productData.brands }}</p>
+    </div>
+    <div class="bloc-series">
+      <div class="serie">
+        <div class="photo">
+          <img v-if="productData" :src="productData.image_url" alt="Image du produit" />
+        </div>
+        <div class="ingredients">
+          <h3>Ingrédients</h3>
+          <p v-if="productData">{{ productData.ingredients_text }}</p>
+        </div>
+      </div>
+      <div class="serie">
+        <div class="valeurs-nutritives">
+          <h3>Valeurs nutritives</h3>
+          <table v-if="productData">
+            <tr>
+              <th>Énergie</th>
+              <td>{{ productData.nutriments.energy }}</td>
+            </tr>
+            <tr>
+              <th>Protéines</th>
+              <td>{{ productData.nutriments.proteins }}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="conditionnement">
+          <h3>Conditionnement, fabricant.</h3>
+          <p v-if="productData">Conditionnement : {{ productData.packaging }}</p>
+          <p v-if="productData">Fabricant : {{ productData.manufacturing_places }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="images-container">
+      <div class="image-bloc">
+        <img v-if="productData" :src="productData.image_url" alt="Image du produit" />
+        <p>Nutriscore</p>
+      </div>
+      <div class="image-bloc">
+        <img v-if="productData" :src="productData.image_url" alt="Image du produit" />
+        <p>Code Nova</p>
+      </div>
+      <div class="image-bloc">
+        <img v-if="productData" :src="productData.image_url" alt="Image du produit" />
+        <p>Avec ou sans huile de palme</p>
+      </div>
+    </div>
+  </div>
+  <div class="credits-container">
+    <p>Crédits : Myuka &copy; 2023. Tous droits réservés.</p>
+  </div>
+  <script>
+    const MyukaApp = {// Création de l'application Vue
+      data() {// Définition des données de l'application
+        return {// Retourne un objet contenant les données de l'application
+          searchQuery: '',// Contiendra la recherche soumise par l'utilisateur
+          productData: null,// Contiendra les données du produit récupérées depuis l'API pour l'affichage
+        };
+      },
+      methods: {
+        async fetchProductData(barcode) {// Récupération des données du produit depuis l'API OpenFoodFacts
+          try {
+            const response = await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`);// Récupération des données du produit
+            const data = await response.json();// Conversion de la réponse en JSON
+            console.log('Réponse API:', response);// Pour voir la réponse complète
+            console.log('Données API:', data);// Pour voir les données récupérées
+            if (data.status === 1) {// Si le produit a été trouvé
+              this.productData = data.product;// Mise à jour des données du produit
+            } else {// Si le produit n'a pas été trouvé
+              console.error('Erreur lors de la récupération des données du produit:', data.status_verbose);// Affichage de l'erreur
+            }
+          } catch (error) {// Si une erreur est survenue
+            console.error('Erreur lors de la récupération des données du produit:', error);
+          }
+        },
+        submitForm() {
+          console.log('Recherche soumise:', this.searchQuery);// Pour voir la recherche soumise
+          this.fetchProductData(this.searchQuery);// Récupération des données du produit
+        },
+      },
+    };
+    Vue.createApp(MyukaApp).mount('#myuka');// Création de l'application Vue
+  </script>
+</body>
+
+</html>
+
+<!--Images dynamiques : Au lieu d'utiliser des images statiques, essayez d'utiliser les images fournies par l'API OpenFoodFacts. Par exemple, vous pouvez afficher l'image du produit en utilisant productData.image_url, et les images pour Nutriscore, Code Nova, etc., en utilisant les URL correspondantes fournies par l'API.
+
+  Pour afficher dynamiquement les ingrédients et les autres informations, vous devez utiliser la même approche que pour l'image. Vous pouvez lier les données de l'API à votre code HTML en utilisant les doubles accolades {{ }} ou les attributs v-bind (raccourci :) pour les attributs HTML.
+
+Afficher plus d'informations sur le produit : Vous pouvez ajouter plus de détails sur le produit, tels que la description, les allergènes, les traces éventuelles, la quantité, etc. L'API OpenFoodFacts fournit de nombreuses données que vous pouvez exploiter pour enrichir votre application.
+
+Améliorer l'affichage du tableau des valeurs nutritives : Vous pouvez rendre le tableau des valeurs nutritives plus informatif et esthétiquement agréable en ajoutant des en-têtes de colonnes, en mettant en forme les nombres (par exemple, en arrondissant les valeurs) et en ajoutant des unités de mesure appropriées (g, mg, %, etc.).
+
+Gérer les erreurs et les cas limites : Vous pouvez améliorer la robustesse de l'application en gérant les erreurs et les cas limites, tels que l'absence d'informations sur un produit recherché, les erreurs de réseau, etc. Vous pouvez informer l'utilisateur de ces situations en affichant des messages d'erreur ou des notifications appropriées.
+
+Utiliser des composants Vue : Pour rendre l'application plus modulaire et facile à maintenir, vous pouvez diviser le code en composants Vue réutilisables. Par exemple, vous pouvez créer des composants pour le menu, le formulaire de recherche, la fiche produit, etc.
+
+Responsivité : Assurez-vous que l'application fonctionne bien sur différents appareils et tailles d'écran en utilisant des techniques de design responsive, telles que les media queries, les grilles flexibles et les unités relatives (%, vw, vh, etc.).
+
+Commentaires et documentation : Ajoutez des commentaires et de la documentation pour expliquer le code et les choix de conception, afin de faciliter la maintenance et la compréhension par d'autres développeurs.
+
+-->

@@ -1,0 +1,126 @@
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  padding: 10px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.formulaire-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.credits-container {
+  text-align: center;
+  margin: 20px;
+  font-size: 14px;
+}
+
+form {
+  display: flex;
+  align-items: center;
+}
+
+input[type="text"] {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #2196F3;
+  color: white;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+button:hover {
+  background-color: #0b75c9;
+}
+
+.fiche-produit-container {
+  margin: 20px;
+}
+
+.fiche-produit {
+  text-align: center;
+  font-size: 18px;
+}
+
+.bloc-series {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.serie {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.photo,
+.ingredients,
+.valeurs-nutritives,
+.conditionnement {
+  width: 45%;
+  text-align: center;
+}
+
+.photo img {
+  max-width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  border: 1px solid #ccc;
+  padding: 5px;
+  text-align: left;
+}
+
+.images-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px;
+}
+
+.image-bloc {
+  text-align: center;
+}
+
+.image-bloc img {
+  max-width: 100%;
+}
+
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+
+#myuka {
+  flex-grow: 1;
+}
+
+.credits-container {
+  text-align: center;
+  margin: 20px;
+  font-size: 14px;
+}
